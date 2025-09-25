@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search, Download, Filter, Eye } from "lucide-react";
+import { Search, Download, Filter, Eye, Edit } from "lucide-react";
 import { motorcyclesData } from "@/data/motorcycles";
 import { NavLink } from "react-router-dom";
 
@@ -225,11 +225,18 @@ const Stock = () => {
                   </TableCell>
                   <TableCell>{motorcycle.salesCount}</TableCell>
                   <TableCell>
-                    <Button asChild variant="ghost" size="sm">
-                      <NavLink to={`/motorcycles/${motorcycle.id}`}>
-                        <Eye className="h-4 w-4" />
-                      </NavLink>
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button asChild variant="ghost" size="sm">
+                        <NavLink to={`/motorcycles/${motorcycle.id}`}>
+                          <Eye className="h-4 w-4" />
+                        </NavLink>
+                      </Button>
+                      <Button asChild variant="ghost" size="sm">
+                        <NavLink to={`/motorcycles/${motorcycle.id}/edit`}>
+                          <Edit className="h-4 w-4" />
+                        </NavLink>
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

@@ -82,9 +82,11 @@ const MotorcycleDetail = () => {
             <Button variant="outline" size="icon">
               <Share2 className="h-4 w-4" />
             </Button>
-            <Button className="flex items-center gap-2">
-              <Edit className="h-4 w-4" />
-              Editar
+            <Button className="flex items-center gap-2" asChild>
+              <NavLink to={`/motorcycles/${motorcycle.id}/edit`}>
+                <Edit className="h-4 w-4" />
+                Editar
+              </NavLink>
             </Button>
           </div>
         </div>
