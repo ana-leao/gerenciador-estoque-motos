@@ -26,11 +26,10 @@ import {
 
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
-  { title: "Análises", url: "/analytics", icon: BarChart3 },
-  { title: "Estoque", url: "/inventory", icon: Package },
-  { title: "Motos", url: "/motorcycles", icon: Bike },
+  { title: "Catálogo", url: "/motorcycles", icon: Bike },
+  { title: "Estoque", url: "/stock", icon: Package },
   { title: "Vendas", url: "/sales", icon: TrendingUp },
-  { title: "Filtros", url: "/filters", icon: Filter },
+  { title: "Análises", url: "/analytics", icon: BarChart3 },
 ];
 
 const settingsItems = [
