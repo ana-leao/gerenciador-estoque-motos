@@ -24,15 +24,15 @@
     --card-foreground: 0 0% 9%;              /* Dark text */
     --card-border: 0 0% 92%;                 /* Light border */
     
-    /* Sidebar - Dark Theme */
-    --sidebar-background: 210 100% 12%;      /* Dark blue-gray */
-    --sidebar-foreground: 0 0% 95%;          /* Light text */
-    --sidebar-primary: 0 72% 51%;            /* Red accent */
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 100% 15%;          /* Slightly lighter dark */
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 210 100% 15%;
-    --sidebar-ring: 0 72% 51%;
+    /* Sidebar - Red Theme */
+    --sidebar-background: 0 72% 51%;         /* Red background */
+    --sidebar-foreground: 0 0% 100%;         /* White text */
+    --sidebar-primary: 0 0% 100%;            /* White for active state */
+    --sidebar-primary-foreground: 0 72% 51%; /* Red text on white */
+    --sidebar-accent: 0 0% 100%;             /* White hover */
+    --sidebar-accent-foreground: 0 72% 51%;  /* Red text on hover */
+    --sidebar-border: 0 72% 45%;             /* Darker red border */
+    --sidebar-ring: 0 0% 100%;
     
     /* Interactive Elements */
     --secondary: 0 0% 96%;
