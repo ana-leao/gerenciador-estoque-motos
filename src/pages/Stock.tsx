@@ -35,7 +35,7 @@ const Stock = () => {
   const colors = Array.from(new Set(motorcyclesData.map(bike => bike.color))).sort();
   const patios = Array.from(new Set(motorcyclesData.map(bike => bike.patio))).sort();
 
-  // Filter motorcycles - apenas livres (não reservadas)
+  // Filter motorcycles
   const filteredMotorcycles = motorcyclesData.filter(bike => {
     const matchesSearch = bike.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          bike.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,9 +47,8 @@ const Stock = () => {
     const matchesColor = selectedColor === "all" || bike.color === selectedColor;
     const matchesPatio = selectedPatio === "all" || bike.patio === selectedPatio;
     const matchesStatus = selectedStatus === "all" || bike.status === selectedStatus;
-    const isAvailable = selectedStatus === "all" ? bike.status !== "Reservado" : true;
     
-    return matchesSearch && matchesBrand && matchesType && matchesColor && matchesPatio && matchesStatus && isAvailable;
+    return matchesSearch && matchesBrand && matchesType && matchesColor && matchesPatio && matchesStatus;
   });
 
   const clearFilters = () => {
