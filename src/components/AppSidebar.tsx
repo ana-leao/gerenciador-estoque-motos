@@ -1,14 +1,8 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
-  BarChart3,
   Bike,
   Package,
-  Search,
-  Settings,
-  Users,
-  Home,
-  TrendingUp,
-  Filter
+  Home
 } from "lucide-react";
 
 import {
@@ -26,15 +20,7 @@ import {
 
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
-  { title: "Catálogo", url: "/motorcycles", icon: Bike },
   { title: "Estoque", url: "/stock", icon: Package },
-  { title: "Vendas", url: "/sales", icon: TrendingUp },
-  { title: "Análises", url: "/analytics", icon: BarChart3 },
-];
-
-const settingsItems = [
-  { title: "Usuários", url: "/users", icon: Users },
-  { title: "Configurações", url: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -76,9 +62,6 @@ export function AppSidebar() {
 
         {/* Navigation */}
         <SidebarGroup className="px-2">
-          <SidebarGroupLabel className="text-sidebar-foreground/70 text-xs uppercase tracking-wider mb-2">
-            {!collapsed && "Navegação"}
-          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
@@ -87,32 +70,6 @@ export function AppSidebar() {
                     <NavLink
                       to={item.url}
                       end={item.url === "/"}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${getNavCls(
-                        item.url
-                      )}`}
-                    >
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span className="font-medium">{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Settings */}
-        <SidebarGroup className="px-2">
-          <SidebarGroupLabel className="text-sidebar-foreground/70 text-xs uppercase tracking-wider mb-2">
-            {!collapsed && "Sistema"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {settingsItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${getNavCls(
                         item.url
                       )}`}

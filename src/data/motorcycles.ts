@@ -9,6 +9,11 @@ export interface Motorcycle {
   image: string;
   status: "Disponível" | "Vendido" | "Reservado";
   category: "Sport" | "Naked" | "Cruiser" | "Adventure" | "Scooter";
+  type: "Nova" | "Seminova";
+  chassi: string;
+  placa?: string;
+  color: string;
+  patio: string;
   engine: string;
   power: string;
   weight: string;
@@ -30,6 +35,10 @@ export const motorcyclesData: Motorcycle[] = [
     image: "src/assets/bike-cbr.png",
     status: "Disponível",
     category: "Sport",
+    type: "Nova",
+    chassi: "9C2JC501XKR000123",
+    color: "Vermelho",
+    patio: "Pátio A",
     engine: "599cc",
     power: "118 CV",
     weight: "194 kg",
@@ -49,6 +58,10 @@ export const motorcyclesData: Motorcycle[] = [
     image: "src/assets/bike-yamaha.png",
     status: "Disponível",
     category: "Naked",
+    type: "Nova",
+    chassi: "JYARN37E0KA000456",
+    color: "Azul",
+    patio: "Pátio B",
     engine: "689cc",
     power: "75 CV",
     weight: "182 kg",
@@ -68,6 +81,10 @@ export const motorcyclesData: Motorcycle[] = [
     image: "src/assets/bike-kawasaki.png",
     status: "Disponível",
     category: "Sport",
+    type: "Nova",
+    chassi: "JKBEXNJ17KA000789",
+    color: "Verde",
+    patio: "Pátio A",
     engine: "649cc",
     power: "68 CV",
     weight: "193 kg",
@@ -87,6 +104,10 @@ export const motorcyclesData: Motorcycle[] = [
     image: "src/assets/hero-bike.png",
     status: "Reservado",
     category: "Sport",
+    type: "Nova",
+    chassi: "WB10AK10XKK000234",
+    color: "Branco",
+    patio: "Pátio C",
     engine: "999cc",
     power: "210 CV",
     weight: "197 kg",
@@ -106,6 +127,11 @@ export const motorcyclesData: Motorcycle[] = [
     image: "src/assets/showroom.png",
     status: "Disponível",
     category: "Naked",
+    type: "Seminova",
+    chassi: "ZDM1RCKW0JB000567",
+    placa: "ABC-1234",
+    color: "Preto",
+    patio: "Pátio B",
     engine: "803cc",
     power: "75 CV",
     weight: "175 kg",
@@ -125,6 +151,11 @@ export const motorcyclesData: Motorcycle[] = [
     image: "src/assets/bike-cbr.png",
     status: "Disponível",
     category: "Naked",
+    type: "Seminova",
+    chassi: "9C6RC650XJM000890",
+    placa: "XYZ-5678",
+    color: "Cinza",
+    patio: "Pátio A",
     engine: "649cc",
     power: "95 CV",
     weight: "200 kg",

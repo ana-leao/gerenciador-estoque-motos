@@ -18,37 +18,46 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search, Download, Filter, Eye, Edit } from "lucide-react";
+import { Search, Download, Filter } from "lucide-react";
 import { motorcyclesData } from "@/data/motorcycles";
-import { NavLink } from "react-router-dom";
 
 const Stock = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedColor, setSelectedColor] = useState("all");
+  const [selectedPatio, setSelectedPatio] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
 
   // Get unique values for filters
   const brands = Array.from(new Set(motorcyclesData.map(bike => bike.brand))).sort();
-  const categories = Array.from(new Set(motorcyclesData.map(bike => bike.category))).sort();
-  const statuses = Array.from(new Set(motorcyclesData.map(bike => bike.status))).sort();
+  const types = Array.from(new Set(motorcyclesData.map(bike => bike.type))).sort();
+  const colors = Array.from(new Set(motorcyclesData.map(bike => bike.color))).sort();
+  const patios = Array.from(new Set(motorcyclesData.map(bike => bike.patio))).sort();
 
-  // Filter motorcycles
+  // Filter motorcycles - apenas livres (não reservadas)
   const filteredMotorcycles = motorcyclesData.filter(bike => {
     const matchesSearch = bike.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          bike.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         bike.model.toLowerCase().includes(searchTerm.toLowerCase());
+                         bike.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         bike.chassi.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (bike.placa && bike.placa.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesBrand = selectedBrand === "all" || bike.brand === selectedBrand;
-    const matchesCategory = selectedCategory === "all" || bike.category === selectedCategory;
+    const matchesType = selectedType === "all" || bike.type === selectedType;
+    const matchesColor = selectedColor === "all" || bike.color === selectedColor;
+    const matchesPatio = selectedPatio === "all" || bike.patio === selectedPatio;
     const matchesStatus = selectedStatus === "all" || bike.status === selectedStatus;
+    const isAvailable = selectedStatus === "all" ? bike.status !== "Reservado" : true;
     
-    return matchesSearch && matchesBrand && matchesCategory && matchesStatus;
+    return matchesSearch && matchesBrand && matchesType && matchesColor && matchesPatio && matchesStatus && isAvailable;
   });
 
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedBrand("all");
-    setSelectedCategory("all");
+    setSelectedType("all");
+    setSelectedColor("all");
+    setSelectedPatio("all");
     setSelectedStatus("all");
   };
 
@@ -63,6 +72,10 @@ const Stock = () => {
       default:
         return "bg-muted";
     }
+  };
+
+  const getTypeColor = (type: string) => {
+    return type === "Nova" ? "bg-primary/10 text-primary border-primary/20" : "bg-muted text-muted-foreground border-muted";
   };
 
   const formatPrice = (price: number) => {
@@ -82,7 +95,7 @@ const Stock = () => {
           <div>
             <h1 className="text-3xl font-bold text-foreground">Controle de Estoque</h1>
             <p className="text-muted-foreground">
-              Gerencie e monitore o estoque de motocicletas
+              Consulta de motos novas e seminovas disponíveis
             </p>
           </div>
           <Button className="flex items-center gap-2">
@@ -95,22 +108,22 @@ const Stock = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="card-elevated p-4">
             <p className="text-sm text-muted-foreground">Total de Motos</p>
-            <p className="text-2xl font-bold text-foreground">{filteredMotorcycles.length}</p>
+            <p className="text-2xl font-bold text-foreground">{filteredMotorcycles.reduce((sum, bike) => sum + bike.stock, 0)}</p>
           </div>
           <div className="card-elevated p-4">
             <p className="text-sm text-muted-foreground">Valor Total</p>
             <p className="text-2xl font-bold text-primary">{formatPrice(totalValue)}</p>
           </div>
           <div className="card-elevated p-4">
-            <p className="text-sm text-muted-foreground">Disponíveis</p>
+            <p className="text-sm text-muted-foreground">Motas Novas</p>
             <p className="text-2xl font-bold text-success">
-              {filteredMotorcycles.filter(bike => bike.status === "Disponível").length}
+              {filteredMotorcycles.filter(bike => bike.type === "Nova").reduce((sum, bike) => sum + bike.stock, 0)}
             </p>
           </div>
           <div className="card-elevated p-4">
-            <p className="text-sm text-muted-foreground">Vendidas</p>
-            <p className="text-2xl font-bold text-error">
-              {filteredMotorcycles.filter(bike => bike.status === "Vendido").length}
+            <p className="text-sm text-muted-foreground">Seminovas</p>
+            <p className="text-2xl font-bold text-warning">
+              {filteredMotorcycles.filter(bike => bike.type === "Seminova").reduce((sum, bike) => sum + bike.stock, 0)}
             </p>
           </div>
         </div>
@@ -119,20 +132,33 @@ const Stock = () => {
         <div className="card-elevated p-6 space-y-4">
           <div className="flex items-center gap-2 mb-4">
             <Filter className="h-5 w-5 text-muted-foreground" />
-            <h3 className="font-semibold text-foreground">Filtros</h3>
+            <h3 className="font-semibold text-foreground">Filtros de Pesquisa</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {/* Search */}
             <div className="md:col-span-2 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Buscar por nome, marca ou modelo..."
+                placeholder="Buscar por nome, chassi, placa..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
+
+            {/* Type Filter */}
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger>
+                <SelectValue placeholder="Tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os tipos</SelectItem>
+                {types.map(type => (
+                  <SelectItem key={type} value={type}>{type}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
             {/* Brand Filter */}
             <Select value={selectedBrand} onValueChange={setSelectedBrand}>
@@ -147,28 +173,28 @@ const Stock = () => {
               </SelectContent>
             </Select>
 
-            {/* Category Filter */}
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            {/* Color Filter */}
+            <Select value={selectedColor} onValueChange={setSelectedColor}>
               <SelectTrigger>
-                <SelectValue placeholder="Categoria" />
+                <SelectValue placeholder="Cor" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todas categorias</SelectItem>
-                {categories.map(category => (
-                  <SelectItem key={category} value={category}>{category}</SelectItem>
+                <SelectItem value="all">Todas as cores</SelectItem>
+                {colors.map(color => (
+                  <SelectItem key={color} value={color}>{color}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
-            {/* Status Filter */}
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            {/* Patio Filter */}
+            <Select value={selectedPatio} onValueChange={setSelectedPatio}>
               <SelectTrigger>
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder="Pátio" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos status</SelectItem>
-                {statuses.map(status => (
-                  <SelectItem key={status} value={status}>{status}</SelectItem>
+                <SelectItem value="all">Todos os pátios</SelectItem>
+                {patios.map(patio => (
+                  <SelectItem key={patio} value={patio}>{patio}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -176,7 +202,7 @@ const Stock = () => {
 
           <div className="flex items-center justify-between pt-2 border-t border-border">
             <p className="text-sm text-muted-foreground">
-              Mostrando {filteredMotorcycles.length} de {motorcyclesData.length} motocicletas
+              Mostrando {filteredMotorcycles.length} motocicleta(s)
             </p>
             <Button variant="outline" size="sm" onClick={clearFilters}>
               Limpar filtros
@@ -185,30 +211,50 @@ const Stock = () => {
         </div>
 
         {/* Table */}
-        <div className="card-elevated">
+        <div className="card-elevated overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Tipo</TableHead>
                 <TableHead>Motocicleta</TableHead>
+                <TableHead>Chassi</TableHead>
+                <TableHead>Placa</TableHead>
+                <TableHead>Cor</TableHead>
+                <TableHead>Pátio</TableHead>
                 <TableHead>Marca</TableHead>
-                <TableHead>Categoria</TableHead>
                 <TableHead>Ano</TableHead>
                 <TableHead>Preço</TableHead>
-                <TableHead>Estoque</TableHead>
+                <TableHead>Qtd</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Vendas</TableHead>
-                <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredMotorcycles.map((motorcycle) => (
                 <TableRow key={motorcycle.id}>
                   <TableCell>
+                    <Badge className={`${getTypeColor(motorcycle.type)} border`}>
+                      {motorcycle.type}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
                     <div className="font-medium">{motorcycle.name}</div>
                     <div className="text-sm text-muted-foreground">{motorcycle.model}</div>
                   </TableCell>
+                  <TableCell>
+                    <span className="font-mono text-xs">{motorcycle.chassi}</span>
+                  </TableCell>
+                  <TableCell>
+                    {motorcycle.placa ? (
+                      <span className="font-mono text-xs">{motorcycle.placa}</span>
+                    ) : (
+                      <span className="text-muted-foreground text-xs">-</span>
+                    )}
+                  </TableCell>
+                  <TableCell>{motorcycle.color}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{motorcycle.patio}</Badge>
+                  </TableCell>
                   <TableCell>{motorcycle.brand}</TableCell>
-                  <TableCell>{motorcycle.category}</TableCell>
                   <TableCell>{motorcycle.year}</TableCell>
                   <TableCell className="font-medium">
                     {formatPrice(motorcycle.price)}
@@ -222,21 +268,6 @@ const Stock = () => {
                     <Badge className={`${getStatusColor(motorcycle.status)} border`}>
                       {motorcycle.status}
                     </Badge>
-                  </TableCell>
-                  <TableCell>{motorcycle.salesCount}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button asChild variant="ghost" size="sm">
-                        <NavLink to={`/motorcycles/${motorcycle.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </NavLink>
-                      </Button>
-                      <Button asChild variant="ghost" size="sm">
-                        <NavLink to={`/motorcycles/${motorcycle.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </NavLink>
-                      </Button>
-                    </div>
                   </TableCell>
                 </TableRow>
               ))}
